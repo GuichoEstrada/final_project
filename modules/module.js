@@ -84,11 +84,23 @@ const deleteRestaurantById = async (id) => {
     }
 };
 
+const searchRestaurantsByAddress = async (borough) => {
+    try {
+        const results = await RestaurantModel.find({ 'borough': borough });
+        return results;
+    } catch (error) {
+        console.error('Error searching restaurants by borough:', error.message);
+        throw error;
+    }
+};
+
+
 module.exports = {
     initialize,
     addNewRestaurant,
     getAllRestaurants,
     getRestaurantById,
     addNewRestaurant,
-    deleteRestaurantById
+    deleteRestaurantById,
+    searchRestaurantsByAddress
 };

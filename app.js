@@ -4,17 +4,25 @@
  * No part of this assignment has been copied manually or electronically from any other source
  * (including web sites) or distributed to other students.*
  * Name: Luis Carlo Estrada Student ID: N01541627 Date: 11/23/2023
+ * Name: Steven Marty Ces Student ID: N01639939 Date: 11/23/2023
  **********************************************************************************/
 const express = require('express');
 const restaurantModule = require('./modules/module');
 const config = require('./config/database');
 const path = require('path');
 
+const bodyParser = require('body-parser');
+
+
 const app = express();
 const port = 3000;
 
 app.set('views', path.join(__dirname, 'views', 'layouts'));
+app.set('views', path.join(__dirname, 'views', 'layout'));
 app.set('view engine', 'pug');
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize the module before starting the server
 restaurantModule.initialize(config.url)
@@ -99,6 +107,29 @@ const defineRoutes = () => {
         } catch (error) {
             console.error('Error deleting restaurant:', error.message);
             res.status(500).json({ message: 'Internal Server Error' });
+        }
+    });
+    // Route for search bar
+    app.get('/search', async (req, res) => {
+        try {
+            res.render('search');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+    //Route for search result
+    app.post('/searched', async (req, res) => {
+        try {
+            app.set('views', path.join(__dirname, 'views', 'layout'));
+            app.set('view engine', 'pug');
+            const address = req.body.keyword;
+            const results = await restaurantModule.searchRestaurantsByAddress(address);
+            res.render('searched', { results });
+            //console.log(results);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
         }
     });
     

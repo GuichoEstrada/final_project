@@ -1,0 +1,18 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Search Results
+  body
+    block content
+      include ../partials/header
+      h1 Search Results
+      ul
+        each restaurant in results
+          li
+            p Name: #{restaurant.name}
+            p Address: #{restaurant.address.building} #{restaurant.address.street}, #{restaurant.address.zipcode}
+            p Borough: #{restaurant.borough}
+            p Cuisine: #{restaurant.cuisine}
+      include ../partials/footer
